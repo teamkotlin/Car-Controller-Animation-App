@@ -6,10 +6,37 @@ import '../components/tesla_bottom_navigation.dart';
 import '../constanins.dart';
 import '../home_controller.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
   final HomeController _controller = HomeController();
 
+  late AnimationController _batterAnimationController;
+
+  late Animation<double> _animationBattery;
+
+  void setUpBatteryAnimation() {
+    _batterAnimationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 600));
+    _animationBattery = CurvedAnimation(
+        parent: _batterAnimationController, curve: const Interval(0.0, 0.5));
+  }
+@override
+  void initState() {
+    super.initState();
+    setUpBatteryAnimation();
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    _batterAnimationController.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
@@ -86,6 +113,14 @@ class HomeScreen extends StatelessWidget {
                         isLock: _controller.isTrunkDoorLock),
                   ),
                 ),
+                AnimatedOpacity(
+                  duration: defaultDuration,
+                  opacity: _controller.selectedBottomTab == 1 ? 1 : 0,
+                  child: SvgPicture.asset(
+                    'assets/icons/Battery.svg',
+                    width: constraints.maxWidth * 0.45,
+                  ),
+                )
               ],
             ),
           ),
