@@ -6,6 +6,13 @@ class HomeController extends ChangeNotifier {
   bool isBonnetDoorLock = true;
   bool isTrunkDoorLock = true;
 
+  int selectedBottomTab = 0;
+
+  onBottomNavigationTabChange(int index) {
+    selectedBottomTab = index;
+    notifyListeners();
+  }
+
   updateLeftDoor() {
     isLeftDoorLock = !isLeftDoorLock;
     notifyListeners();
