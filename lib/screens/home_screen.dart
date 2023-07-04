@@ -2,6 +2,7 @@ import 'package:car_controller_animation/components/door_lock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../components/temp_btn.dart';
 import '../components/tesla_bottom_navigation.dart';
 import '../constanins.dart';
 import '../home_controller.dart';
@@ -201,6 +202,96 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                         ),
                       ],
                     ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(defaultPadding),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: 120,
+                        child: Row(
+                          children: [
+                            TempButton(
+                              press: _controller.updateCoolTabSelected,
+                              isActive: _controller.isCoolTabSelected,
+                              label: 'Cool',
+                              svgSrc: 'assets/icons/coolShape.svg',
+                            ),
+                            const SizedBox(
+                              width: 20,
+                            ),
+                            TempButton(
+                              press: _controller.updateCoolTabSelected,
+                              isActive: !_controller.isCoolTabSelected,
+                              label: 'Heat',
+                              svgSrc: 'assets/icons/heatShape.svg',
+                              activeColor: Colors.red,
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Spacer(),
+                      Column(
+                        children: [
+                          IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.arrow_drop_up_outlined,
+                                size: 32,
+                              )),
+                          const Text(
+                            '29 \u2103',
+                            style: TextStyle(fontSize: 82),
+                          ),
+                          IconButton(
+                              onPressed: () {},
+                              icon: const Icon(
+                                Icons.arrow_drop_down_outlined,
+                                size: 32,
+                              )),
+                        ],
+                      ),
+                      const Spacer(),
+                      Text('Current Temperature'.toUpperCase()),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Inside'.toUpperCase()),
+                              Text(
+                                '20 \u2103',
+                                style: Theme.of(context).textTheme.headline5,
+                              )
+                            ],
+                          ),
+                          const SizedBox(
+                            width: 30,
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Outside'.toUpperCase(),
+                                style: TextStyle(color: Colors.white38),
+                              ),
+                              Text(
+                                '28 \u2103',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline5
+                                    ?.copyWith(color: Colors.white38),
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ],
