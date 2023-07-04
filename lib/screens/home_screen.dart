@@ -23,6 +23,8 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late Animation<double> _animationBattery;
   late Animation<double> _animationBatteryStatus;
   late Animation<double> _animationCarShift;
+  late Animation<double> _animationTempStatus;
+  late Animation<double> _animationCoolGlow;
 
   void setUpBatteryAnimation() {
     _batterAnimationController = AnimationController(
@@ -38,6 +40,10 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         vsync: this, duration: const Duration(milliseconds: 900));
     _animationCarShift = CurvedAnimation(
         parent: _tempAnimationController, curve: const Interval(0.2, 0.4));
+    _animationTempStatus = CurvedAnimation(
+        parent: _tempAnimationController, curve: const Interval(0.45, 0.6));
+    _animationCoolGlow = CurvedAnimation(
+        parent: _tempAnimationController, curve: const Interval(0.7, 1));
   }
 
   @override
@@ -204,96 +210,123 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(defaultPadding),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: 120,
-                        child: Row(
-                          children: [
-                            TempButton(
-                              press: _controller.updateCoolTabSelected,
-                              isActive: _controller.isCoolTabSelected,
-                              label: 'Cool',
-                              svgSrc: 'assets/icons/coolShape.svg',
-                            ),
-                            const SizedBox(
-                              width: 20,
-                            ),
-                            TempButton(
-                              press: _controller.updateCoolTabSelected,
-                              isActive: !_controller.isCoolTabSelected,
-                              label: 'Heat',
-                              svgSrc: 'assets/icons/heatShape.svg',
-                              activeColor: Colors.red,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const Spacer(),
-                      Column(
+                AnimatedPositioned(
+                  top: 60 * (1 - _animationTempStatus.value),
+                  height: constraints.maxHeight,
+                  width: constraints.maxWidth,
+                  duration: defaultDuration * 0.5,
+                  child: AnimatedOpacity(
+                    opacity: _animationTempStatus.value,
+                    duration: defaultDuration,
+                    child: Padding(
+                      padding: const EdgeInsets.all(defaultPadding),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.arrow_drop_up_outlined,
-                                size: 32,
-                              )),
-                          const Text(
-                            '29 \u2103',
-                            style: TextStyle(fontSize: 82),
+                          SizedBox(
+                            height: 120,
+                            child: Row(
+                              children: [
+                                TempButton(
+                                  press: _controller.updateCoolTabSelected,
+                                  isActive: _controller.isCoolTabSelected,
+                                  label: 'Cool',
+                                  svgSrc: 'assets/icons/coolShape.svg',
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                TempButton(
+                                  press: _controller.updateCoolTabSelected,
+                                  isActive: !_controller.isCoolTabSelected,
+                                  label: 'Heat',
+                                  svgSrc: 'assets/icons/heatShape.svg',
+                                  activeColor: Colors.red,
+                                ),
+                              ],
+                            ),
                           ),
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.arrow_drop_down_outlined,
-                                size: 32,
-                              )),
-                        ],
-                      ),
-                      const Spacer(),
-                      Text('Current Temperature'.toUpperCase()),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Row(
-                        children: [
+                          const Spacer(),
                           Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Inside'.toUpperCase()),
-                              Text(
-                                '20 \u2103',
-                                style: Theme.of(context).textTheme.headline5,
-                              )
-                            ],
-                          ),
-                          const SizedBox(
-                            width: 30,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Outside'.toUpperCase(),
-                                style: TextStyle(color: Colors.white38),
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.arrow_drop_up_outlined,
+                                    size: 32,
+                                  )),
+                              const Text(
+                                '29 \u2103',
+                                style: TextStyle(fontSize: 82),
                               ),
-                              Text(
-                                '28 \u2103',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline5
-                                    ?.copyWith(color: Colors.white38),
-                              )
+                              IconButton(
+                                  onPressed: () {},
+                                  icon: const Icon(
+                                    Icons.arrow_drop_down_outlined,
+                                    size: 32,
+                                  )),
+                            ],
+                          ),
+                          const Spacer(),
+                          Text('Current Temperature'.toUpperCase()),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text('Inside'.toUpperCase()),
+                                  Text(
+                                    '20 \u2103',
+                                    style:
+                                        Theme.of(context).textTheme.headline5,
+                                  )
+                                ],
+                              ),
+                              const SizedBox(
+                                width: 30,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Outside'.toUpperCase(),
+                                    style: TextStyle(color: Colors.white38),
+                                  ),
+                                  Text(
+                                    '28 \u2103',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline5
+                                        ?.copyWith(color: Colors.white38),
+                                  )
+                                ],
+                              ),
                             ],
                           ),
                         ],
                       ),
-                    ],
+                    ),
                   ),
                 ),
+                Positioned(
+                    right: -180 * (1 - _animationCoolGlow.value),
+                    child: SizedBox(
+                        width: 200,
+                        child: AnimatedSwitcher(
+                          duration: defaultDuration,
+                          child: _controller.isCoolTabSelected
+                              ? Image.asset(
+                                  'assets/images/Cool_glow_2.png',
+                                  key: UniqueKey(),
+                                )
+                              : Image.asset(
+                                  'assets/images/Hot_glow_4.png',
+                                  key: UniqueKey(),
+                                ),
+                        )))
               ],
             ),
           ),
